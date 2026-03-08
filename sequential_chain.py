@@ -14,7 +14,7 @@ prompt1 = PromptTemplate(
 )
 
 prompt2 = PromptTemplate(
-    template="Generate 5 pointer summary from the following text \n {text}",
+    template="Generate a 5 pointer summary from the following text \n {text}",
     input_variables=["text"]
 
 )
@@ -23,4 +23,10 @@ model = ChatGroq(model="llama-3.1-8b-instant")
 
 parser = StrOutputParser()
 
-chain = prompt1 | model 
+chain = prompt1 | model | parser | prompt2 | model | parser
+
+result = chain.invoke({'topic':"Unemployment in India"})
+
+print(result)
+
+chain.get_graph().print_ascii()
